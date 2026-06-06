@@ -1,0 +1,65 @@
+blueprint:
+  name: Ikea on/off button (E1743) cover control
+  description: Control cover with IKEA Tradfri ON/OFF button (E1743).
+  domain: automation
+  input:
+    button:
+      name: button
+      description: Ikea ON/OFF Button (E1743)
+      selector:
+        entity:
+          domain:
+          - sensor
+          multiple: false
+    cover:
+      name: Cover
+      description: Controlled Cover
+      selector:
+        target:
+          entity:
+          - domain:
+            - cover
+  source_url: https://community.home-assistant.io/t/ikea-on-off-button-e1743-to-control-covers-blinds/286307
+mode: restart
+max_exceeded: silent
+trigger:
+- platform: state
+  entity_id: !input button
+  attribute: action
+variables:
+  command: '{{ trigger.to_state.state }}'
+condition:
+- condition: template
+  value_template: '{{ command != ''''}}'
+action:
+- choose:
+  - conditions:
+    - '{{ command == ''off'' }}'
+    sequence:
+    - service: cover.close_cover
+      target: !input cover
+      data: {}
+  - conditions:
+    - '{{ command == ''on'' }}'
+    sequence:
+    - service: cover.open_cover
+      data: {}
+      target: !input cover
+  - conditions:
+    - '{{ command == ''brightness_move_down'' }}'
+    sequence:
+    - service: cover.close_cover
+      data: {}
+      target: !input cover
+  - conditions:
+    - '{{ command == ''brightness_move_up'' }}'
+    sequence:
+    - service: cover.open_cover
+      data: {}
+      target: !input cover
+  - conditions:
+    - '{{ command == ''brightness_stop'' }}'
+    sequence:
+    - service: cover.stop_cover
+      data: {}
+      target: !input cover
