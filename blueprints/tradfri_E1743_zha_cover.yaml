@@ -6,11 +6,6 @@ blueprint:
     button:
       name: button
       description: Ikea ON/OFF Button (E1743)
-      selector:
-        entity:
-          domain:
-          - sensor
-          multiple: false
     cover:
       name: Cover
       description: Controlled Cover
@@ -19,7 +14,7 @@ blueprint:
           entity:
           - domain:
             - cover
-  source_url: https://community.home-assistant.io/t/ikea-on-off-button-e1743-to-control-covers-blinds/286307
+  source_url: https://github.com/cliviu74/homeassistant/blob/main/blueprints/tradfri_E1743_zha_cover.yaml
 mode: restart
 max_exceeded: silent
 trigger:
